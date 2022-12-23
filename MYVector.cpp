@@ -4,17 +4,16 @@
 using namespace std;
 
 template <class T>
-Vector<T>::Vector(int cap)
+MYVector<T>::MYVector(int cap)
     : capacity_{ cap }
     , size_{ 0 }
     , data{ new T[capacity] }
 {
-    vec.begin();
     // empty body
 }
 
 template <class T>
-Vector<T>::Vector(T* aData, int sz)
+MYVector<T>::MYVector(T* aData, int sz)
     : capacity_{ sz }
     , size_{ sz }
     , data{ new T[capacity_] }
@@ -24,7 +23,7 @@ Vector<T>::Vector(T* aData, int sz)
 }
 
 template <class T>
-Vector<T>::Vector(const Vector& other)
+MYVector<T>::MYVector(const MYVector& other)
     : capacity_{ other.capacity() }
     , size_{ other.size() }
     , data{ new T[capacity_] }
@@ -34,13 +33,13 @@ Vector<T>::Vector(const Vector& other)
 }
 
 template <class T>
-Vector<T>::~Vector()
+MYVector<T>::~MYVector()
 {
     delete[] data;
 }
 
 template <class T>
-const Vector<T>& Vector<T>::operator=(const Vector<T>& other)
+const MYVector<T>& MYVector<T>::operator=(const MYVector<T>& other)
 {
     if (this != &other)
     {
@@ -57,7 +56,7 @@ const Vector<T>& Vector<T>::operator=(const Vector<T>& other)
 }
 
 template <class T>
-const Vector<T>& Vector<T>::operator=(const Vector<T>&& other)
+const MYVector<T>& MYVector<T>::operator=(const MYVector<T>&& other)
 {
     if (this != &other)
     {
@@ -76,25 +75,25 @@ const Vector<T>& Vector<T>::operator=(const Vector<T>&& other)
 }
 
 template <class T>
-T& Vector<T>::operator[](int index)
+T& MYVector<T>::operator[](int index)
 {
-    if (index < 0 || index > (size_ - 1))
+    if (index < 0 || index >(size_ - 1))
         throw out_of_range("index out of range");
 
     return data[index];
 }
 
 template <class T>
-const T& Vector<T>::operator[](int index) const
+const T& MYVector<T>::operator[](int index) const
 {
-    if (index < 0 || index > (size_ - 1))
+    if (index < 0 || index >(size_ - 1))
         throw out_of_range("index out of range");
 
     return data[index];
 }
 
 template <class T>
-int Vector<T>::push_back(T element)
+int MYVector<T>::push_back(T element)
 {
     if (size() == capacity())
         resize();
@@ -106,33 +105,87 @@ int Vector<T>::push_back(T element)
 }
 
 template <class T>
-T Vector<T>::pop_back()
+T MYVector<T>::pop_back()
 {
     --size_;
     return data[size_];
 }
 
 
+template <class T>
+void MYVector<T>::erase(iterator itr)
+{
+    if (itr < begin() || itr >= end())
+        throw out_of_range("iterator out of range");
 
-// erase
+    int pos = itr - begin();
+    
+    --size_;
+    for (int i{ pos }; i < size(); ++i)
+        data[i + 1] = data[i];
+    
+}
 
+template <class T>
+void MYVector<T>::erase(iterator first, iterator last)
+{
+    if (first < begin() || first >= end())
+        throw out_of_range("iterator out of range");
+    
+    if (last < begin() || last >= end())
+        throw out_of_range("iterator out of range");
 
+    if (first <= last)
+    {
+        int pos = first - begin();
+        int diff = last - first + 1;
 
-// erase
+        size_ -= diff;
+        for (int i{ pos }; i < size(); ++i)
+        {
+            data[i] = data[i + diff];
+        }
+    }
+}
 
 
 template <class T>
-void Vector<T>::clear()
+void MYVector<T>::clear()
 {
     delete[] data;
     size_ = 0;
 }
 
-// insert
+template <class T>
+void MYVector<T>::insert(iterator itr, T value)
+{
+    if (size() == capacity())
+        resize();
+
+    int pos = itr - begin();
+
+    for (int i{ size() }; i > pos; --i)
+        data[i] = data[i - 1];
+
+    data[pos] = value;
+    ++size_;
+}
+
+template <class T>
+iterator MYVector<T>::begin() const
+{
+    return data;
+}
+
+template <class T>
+iterator MYVector<T>::end() const
+{
+    return data + size();
+}
 
 
 template <class T>
-bool Vector<T>::operator==(const Vector<T>& other) const
+bool MYVector<T>::operator==(const MYVector<T>& other) const
 {
     if (size() != other.size())
         return false;
@@ -145,7 +198,7 @@ bool Vector<T>::operator==(const Vector<T>& other) const
 }
 
 template <class T>
-bool Vector<T>::operator<(const Vector<T>& other) const
+bool MYVector<T>::operator<(const MYVector<T>& other) const
 {
     if (size() != other.size())
         return size() < other.size();
@@ -158,21 +211,21 @@ bool Vector<T>::operator<(const Vector<T>& other) const
 }
 
 template <class T>
-int Vector<T>::size() const { return size_ }
+int MYVector<T>::size() const { return size_ }
 
 template <class T>
-int Vector<T>::capacity() const { return capacity_ }
+int MYVector<T>::capacity() const { return capacity_ }
 
 template <class T>
-bool Vector<T>::empty() const { return (size_ == 0); }
+bool MYVector<T>::empty() const { return (size_ == 0); }
 
 template <class T>
-int Vector<T>::resize()
+int MYVector<T>::resize()
 {
     capacity_ = static_cast<int>(capacity() * 1.5);
-    
+
     T* newData = new T[capacity()];
-    
+
     for (int i{ 0 }; i < size(); ++i)
         newData[i] = data[i];
 

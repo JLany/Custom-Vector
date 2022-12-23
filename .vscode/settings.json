@@ -6,6 +6,7 @@
         "xstring": "cpp",
         "xutility": "cpp",
         "initializer_list": "cpp",
-        "xstddef": "cpp"
+        "xstddef": "cpp",
+        "utility": "cpp"
     }
 }

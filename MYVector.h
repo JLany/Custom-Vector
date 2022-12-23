@@ -7,22 +7,22 @@
 #define iterator T*
 
 template <class T>
-class Vector {
+class MYVector {
     // friends
     friend std::ostream& operator << (std::ostream& out, XYvector<T>);
 
 public:
     // Constructors and Big 4
-    Vector(int); // Initialize by specific capacity
+    MYVector(int); // Initialize by specific capacity
     // No content is added, size = 0
     // Assign a default size value
 
-    Vector(T*, int n); // Initialize by n items from array
-    Vector(const Vector&); // Initialize with a copy
-    ~Vector(); // Delete allocated memory
+    MYVector(T*, int n); // Initialize by n items from array
+    MYVector(const MYVector&); // Initialize with a copy
+    ~MYVector(); // Delete allocated memory
 
-    const Vector<T>& operator=(const Vector<T>&); // Copy assignment
-    const Vector<T>& operator=(const Vector<T>&&); // Move assignment
+    const MYVector<T>& operator=(const MYVector<T>&); // Copy assignment
+    const MYVector<T>& operator=(const MYVector<T>&&); // Move assignment
 
     // Access operations
     T& operator[](int); // Access item by reference
@@ -48,13 +48,13 @@ public:
     // Iterators // Supports *, + and ++ operations at least
     // Can use: typedef T* iterator
     // Or u can use std::iterator so you can
-    // apply STL algorithms on Vector
-    iterator begin(); // Return an iterator (T*)
-    iterator end(); // Return an iterator (T*)
+    // apply STL algorithms on MYVector
+    iterator begin() const; // Return an iterator (T*)
+    iterator end() const; // Return an iterator (T*)
 
     // Comparison operations
-    bool operator==(const Vector<T>&) const; // Return true if ==
-    bool operator<(const Vector<T>&) const; // Compares item by item
+    bool operator==(const MYVector<T>&) const; // Return true if ==
+    bool operator<(const MYVector<T>&) const; // Compares item by item
     // Return true if first different item in this is < in other
 
     // Capacity operations
