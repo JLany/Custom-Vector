@@ -235,3 +235,12 @@ int MYVector<T>::resize()
 
     return capacity();
 }
+
+template <class T>
+ostream& operator<<(ostream& os, const MYVector<T> vec)
+{
+    for (int i{ 0 }; i < vec.size(); ++i)
+        os << vec.data[i] << " ";
+
+    return os;
+}

@@ -9,7 +9,7 @@
 template <class T>
 class MYVector {
     // friends
-    friend std::ostream& operator << (std::ostream& out, XYvector<T>);
+    friend std::ostream& operator << (std::ostream& out, MYvector<T>);
 
 public:
     // Constructors and Big 4
