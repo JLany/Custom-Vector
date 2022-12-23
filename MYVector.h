@@ -5,8 +5,8 @@
 
 template <class T>
 class Vector {
-    // Friends
-    friend ostream& operator << (ostream& out, XYvector<T>);
+    // friends
+    friend std::ostream& operator << (std::ostream& out, XYvector<T>);
     
 public:
     // Constructors and Big 4
@@ -60,7 +60,9 @@ public:
     int resize(); // Relocate to bigger space
 
 private:
-    
+    T* data;
+    std::size_t size_;
+    std::size_t capacity_;
 };
 
 #endif // MYVECTOR_H
