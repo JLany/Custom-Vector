@@ -7,7 +7,7 @@ template <class T>
 MYVector<T>::MYVector(int cap)
     : capacity_{ cap }
     , size_{ 0 }
-    , data{ new T[capacity] }
+    , data{ new T[capacity_] }
 {
     // empty body
 }
@@ -35,7 +35,10 @@ MYVector<T>::MYVector(const MYVector& other)
 template <class T>
 MYVector<T>::~MYVector()
 {
-    delete[] data;
+    if (data)
+        delete data;
+
+    data = nullptr;
 }
 
 template <class T>
@@ -44,7 +47,7 @@ const MYVector<T>& MYVector<T>::operator=(const MYVector<T>& other)
     if (this != &other)
     {
         size_ = other.size();
-        capacity = other.capacity();
+        capacity_ = other.capacity();
         delete[] data;
         data = new T[capacity_];
 
@@ -56,14 +59,14 @@ const MYVector<T>& MYVector<T>::operator=(const MYVector<T>& other)
 }
 
 template <class T>
-const MYVector<T>& MYVector<T>::operator=(const MYVector<T>&& other)
+const MYVector<T>& MYVector<T>::operator=(MYVector<T>&& other)
 {
     if (this != &other)
     {
         size_ = other.size();
         other.size_ = 0;
 
-        capacity = other.capacity();
+        capacity_ = other.capacity();
         other.capacity_ = 0;
 
         delete[] data;
@@ -119,11 +122,11 @@ void MYVector<T>::erase(iterator itr)
         throw out_of_range("iterator out of range");
 
     int pos = itr - begin();
-    
+
     --size_;
     for (int i{ pos }; i < size(); ++i)
         data[i + 1] = data[i];
-    
+
 }
 
 template <class T>
@@ -131,7 +134,7 @@ void MYVector<T>::erase(iterator first, iterator last)
 {
     if (first < begin() || first >= end())
         throw out_of_range("iterator out of range");
-    
+
     if (last < begin() || last >= end())
         throw out_of_range("iterator out of range");
 
@@ -159,10 +162,14 @@ void MYVector<T>::clear()
 template <class T>
 void MYVector<T>::insert(iterator itr, T value)
 {
+    if (itr < begin() || itr > end())
+        throw out_of_range("iterator out of range");
+
     if (size() == capacity())
         resize();
 
     int pos = itr - begin();
+    // cout << "\npos: " << pos << "\n\n";
 
     for (int i{ size() }; i > pos; --i)
         data[i] = data[i - 1];
@@ -211,10 +218,10 @@ bool MYVector<T>::operator<(const MYVector<T>& other) const
 }
 
 template <class T>
-int MYVector<T>::size() const { return size_ }
+int MYVector<T>::size() const { return size_; }
 
 template <class T>
-int MYVector<T>::capacity() const { return capacity_ }
+int MYVector<T>::capacity() const { return capacity_; }
 
 template <class T>
 bool MYVector<T>::empty() const { return (size_ == 0); }
@@ -236,11 +243,14 @@ int MYVector<T>::resize()
     return capacity();
 }
 
-template <class T>
-ostream& operator<<(ostream& os, const MYVector<T> vec)
-{
-    for (int i{ 0 }; i < vec.size(); ++i)
-        os << vec.data[i] << " ";
 
-    return os;
-}
+template class MYVector<string>;
+template class MYVector<double>;
+template class MYVector<int>;
+template class MYVector<long long>;
+template class MYVector<char>;
+template class MYVector<string*>;
+template class MYVector<double*>;
+template class MYVector<int*>;
+template class MYVector<long long*>;
+template class MYVector<char*>;

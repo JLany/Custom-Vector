@@ -9,7 +9,13 @@
 template <class T>
 class MYVector {
     // friends
-    friend std::ostream& operator << (std::ostream& out, MYvector<T>);
+    friend std::ostream& operator<<(std::ostream& os, const MYVector<T>& vec)
+    {
+        for (int i{ 0 }; i < vec.capacity(); ++i)
+            os << vec.data + i << " ";
+
+        return os;
+    }
 
 public:
     // Constructors and Big 4
@@ -22,7 +28,7 @@ public:
     ~MYVector(); // Delete allocated memory
 
     const MYVector<T>& operator=(const MYVector<T>&); // Copy assignment
-    const MYVector<T>& operator=(const MYVector<T>&&); // Move assignment
+    const MYVector<T>& operator=(MYVector<T>&&); // Move assignment
 
     // Access operations
     T& operator[](int); // Access item by reference
