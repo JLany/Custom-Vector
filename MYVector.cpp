@@ -7,7 +7,7 @@ template <class T>
 MYVector<T>::MYVector(int cap)
     : capacity_{ cap }
     , size_{ 0 }
-    , data{ new T[capacity_] }
+    , data{ new T[cap]{} }
 {
     // empty body
 }
@@ -16,7 +16,7 @@ template <class T>
 MYVector<T>::MYVector(T* aData, int sz)
     : capacity_{ sz }
     , size_{ sz }
-    , data{ new T[capacity_] }
+    , data{ new T[sz]{} }
 {
     for (int i{ 0 }; i < sz; ++i)
         data[i] = aData[i];
@@ -26,7 +26,7 @@ template <class T>
 MYVector<T>::MYVector(const MYVector& other)
     : capacity_{ other.capacity() }
     , size_{ other.size() }
-    , data{ new T[capacity_] }
+    , data{ new T[other.capacity()]{} }
 {
     for (int i{ 0 }; i < size_; ++i)
         data[i] = other.data[i];
@@ -49,7 +49,7 @@ const MYVector<T>& MYVector<T>::operator=(const MYVector<T>& other)
         size_ = other.size();
         capacity_ = other.capacity();
         delete[] data;
-        data = new T[capacity_];
+        data = new T[capacity_]{};
 
         for (int i{ 0 }; i < size_; ++i)
             data[i] = other.data[i];
@@ -59,7 +59,7 @@ const MYVector<T>& MYVector<T>::operator=(const MYVector<T>& other)
 }
 
 template <class T>
-const MYVector<T>& MYVector<T>::operator=(MYVector<T>&& other)
+const MYVector<T>& MYVector<T>::operator=(MYVector<T>&& other) noexcept
 {
     if (this != &other)
     {
@@ -101,7 +101,7 @@ int MYVector<T>::push_back(T element)
     if (size() == capacity())
         resize();
 
-    data[size()] = element;
+    data[size_] = element;
     ++size_;
 
     return size();
@@ -116,10 +116,10 @@ T MYVector<T>::pop_back()
 
 
 template <class T>
-void MYVector<T>::erase(iterator itr)
+void MYVector<T>::erase(Iterator itr)
 {
     if (itr < begin() || itr >= end())
-        throw out_of_range("iterator out of range");
+        throw out_of_range("Iterator out of range");
 
     int pos = itr - begin();
 
@@ -130,13 +130,13 @@ void MYVector<T>::erase(iterator itr)
 }
 
 template <class T>
-void MYVector<T>::erase(iterator first, iterator last)
+void MYVector<T>::erase(Iterator first, Iterator last)
 {
     if (first < begin() || first >= end())
-        throw out_of_range("iterator out of range");
+        throw out_of_range("Iterator out of range");
 
     if (last < begin() || last >= end())
-        throw out_of_range("iterator out of range");
+        throw out_of_range("Iterator out of range");
 
     if (first <= last)
     {
@@ -160,15 +160,17 @@ void MYVector<T>::clear()
 }
 
 template <class T>
-void MYVector<T>::insert(iterator itr, T value)
+void MYVector<T>::insert(Iterator itr, T value)
 {
     if (itr < begin() || itr > end())
-        throw out_of_range("iterator out of range");
+        throw out_of_range("Iterator out of range");
+
+    Iterator old_begin = begin();
 
     if (size() == capacity())
         resize();
 
-    int pos = itr - begin();
+    int pos = itr - old_begin;
     // cout << "\npos: " << pos << "\n\n";
 
     for (int i{ size() }; i > pos; --i)
@@ -179,20 +181,20 @@ void MYVector<T>::insert(iterator itr, T value)
 }
 
 template <class T>
-iterator MYVector<T>::begin() const
+Iterator MYVector<T>::begin() const
 {
     return data;
 }
 
 template <class T>
-iterator MYVector<T>::end() const
+Iterator MYVector<T>::end() const
 {
     return data + size();
 }
 
 
 template <class T>
-bool MYVector<T>::operator==(const MYVector<T>& other) const
+bool MYVector<T>::operator==(const MYVector<T>& other) const 
 {
     if (size() != other.size())
         return false;
@@ -231,7 +233,7 @@ int MYVector<T>::resize()
 {
     capacity_ = static_cast<int>(capacity() * 1.5);
 
-    T* newData = new T[capacity()];
+    T* newData = new T[capacity()]{};
 
     for (int i{ 0 }; i < size(); ++i)
         newData[i] = data[i];

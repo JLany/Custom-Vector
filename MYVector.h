@@ -1,18 +1,17 @@
 #ifndef MYVECTOR_H
 #define MYVECTOR_H
 
-#include <iterator>
 #include <iostream>
 
-#define iterator T*
+#define Iterator T*
 
 template <class T>
 class MYVector {
     // friends
     friend std::ostream& operator<<(std::ostream& os, const MYVector<T>& vec)
     {
-        for (int i{ 0 }; i < vec.capacity(); ++i)
-            os << vec.data + i << " ";
+        for (int i{ 0 }; i < vec.size(); ++i)
+            os << vec.data[i] << " ";
 
         return os;
     }
@@ -28,7 +27,7 @@ public:
     ~MYVector(); // Delete allocated memory
 
     const MYVector<T>& operator=(const MYVector<T>&); // Copy assignment
-    const MYVector<T>& operator=(MYVector<T>&&); // Move assignment
+    const MYVector<T>& operator=(MYVector<T>&&) noexcept; // Move assignment
 
     // Access operations
     T& operator[](int); // Access item by reference
@@ -41,22 +40,22 @@ public:
 
     T pop_back(); // Remove and return last element in vec
 
-    void erase(iterator); // Remove item at iterator
+    void erase(Iterator); // Remove item at Iterator
     // Throw exception if invalid iter
-    void erase(iterator, iterator); // Remove items between
-    // iterator 1 <= iterator 2 otherwise do nothing
-    // Throw exception if any iterator outside range
+    void erase(Iterator, Iterator); // Remove items between
+    // Iterator 1 <= Iterator 2 otherwise do nothing
+    // Throw exception if any Iterator outside range
 
     void clear(); // Delete all vector content
-    void insert(iterator, T); // Insert item at iterator
+    void insert(Iterator, T); // Insert item at Iterator
     // Throw exception if invalid
 
     // Iterators // Supports *, + and ++ operations at least
-    // Can use: typedef T* iterator
-    // Or u can use std::iterator so you can
+    // Can use: typedef T* Iterator
+    // Or u can use std::Iterator so you can
     // apply STL algorithms on MYVector
-    iterator begin() const; // Return an iterator (T*)
-    iterator end() const; // Return an iterator (T*)
+    Iterator begin() const; // Return an Iterator (T*)
+    Iterator end() const; // Return an Iterator (T*)
 
     // Comparison operations
     bool operator==(const MYVector<T>&) const; // Return true if ==
