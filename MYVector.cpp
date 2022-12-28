@@ -1,5 +1,6 @@
 #include "MYVector.h"
 #include <iostream>
+#include <cmath>
 #include <stdexcept>
 using namespace std;
 
@@ -125,7 +126,7 @@ void MYVector<T>::erase(Iterator itr)
 
     --size_;
     for (int i{ pos }; i < size(); ++i)
-        data[i + 1] = data[i];
+        data[i] = data[i + 1];
 
 }
 
@@ -171,7 +172,6 @@ void MYVector<T>::insert(Iterator itr, T value)
         resize();
 
     int pos = itr - old_begin;
-    // cout << "\npos: " << pos << "\n\n";
 
     for (int i{ size() }; i > pos; --i)
         data[i] = data[i - 1];
@@ -231,7 +231,7 @@ bool MYVector<T>::empty() const { return (size_ == 0); }
 template <class T>
 int MYVector<T>::resize()
 {
-    capacity_ = static_cast<int>(capacity() * 1.5);
+    capacity_ = static_cast<int>(ceil(capacity() * 1.5));
 
     T* newData = new T[capacity()]{};
 
